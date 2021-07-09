@@ -1,0 +1,166 @@
+﻿@using Hello.BookStore.Repository
+@inject IBookRepository _bookRepository
+
+@model BookModel
+
+
+@{
+    var title = "Error Found";
+    if (Model != null) title = Model.Title;
+    ViewData["Title"] = "Book details - " + title;
+    var bookList = await _bookRepository.GetAllBooks();
+    var allReview = await _bookRepository.GetAllReviewOfBook();
+
+    int length = allReview.Count;
+}
+
+
+
+
+
+
+
+@if (Model == null)
+{
+    <div class="container">
+        <div class="row">
+            <h3>The book is not Found in the Store</h3>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="p-1 mb-1 bg-danger text-white"> <h2 class="d-flex justify-content-center">Book details</h2> </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <img src="@Model.CoverImageUrl" class="card-img-top img-thumbnail" style="width:75%;" alt="Book details image cap" />
+            </div>
+
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>@Model.Title</h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-primary">
+                        <span class="label label-primary">By: </span>
+                        <span class="monospaced">@Model.Author</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-outline-primary" href="@Model.BookPdfUrl" target="_blank">
+                            Read now
+                        </a>
+                    </div>
+                </div>
+
+                <hr />
+
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="font-weight-bold">Category - </span> @Model.Category</li>
+                    <li class="list-group-item"><span class="font-weight-bold">Total pages - </span> @Model.TotalPages</li>
+                    <li class="list-group-item"><span class="font-weight-bold">Language - </span> @Model.Language</li>
+                </ul>
+
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-primary" asp-controller="book" asp-action="ReviewOfBookById" asp-route-id="@Model.ID" target="_blank">
+                            Give review of the book
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr style="height:1px;background-color:black" />
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Description</h3>
+            </div>
+            <div class="col-md-12">
+                <p class="description text-justify p-2">
+                    @Model.Description
+                </p>
+            </div>
+        </div>
+
+        <hr style="height:1px;background-color:black" />
+
+        @{
+            int ReviewNumbers = 0;
+            foreach (var review in allReview)
+            {
+                if (review.BookId == Model.ID)
+                {
+                    ReviewNumbers += 1;
+                }
+            }
+        }
+        @if (ReviewNumbers > 0)
+        {
+            <div class="p-1 mb-1 bg-info text-white"><h3 class="d-flex justify-content-center">Reviews of the book</h3></div>
+        }
+        <div class="row col-md-12">
+            <hr />
+            @foreach (var review in allReview)
+            {
+                @if (review.BookId == Model.ID)
+                {
+                    <div class="row border">
+                        <div class="col-md-4">
+                            <div class="col-md-12">
+                                <img src="~/images/noimage.png" style="border-radius:50%; width:40%" alt="user review" />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 text-primary">
+                                    <span class="label label-primary">By: </span>
+                                    <span class="monospaced">@review.ReviewerName</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5>@review.ReviewTime</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row p-2">
+                                <p class="text-justify">@review.BookReviewDetails</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="py-5">
+            <div class="p-1 mb-1 bg-warning text-black"><h3 class="d-flex justify-content-center">Similar books</h3></div>
+            <div class="row">
+
+                @foreach (var book in bookList)
+                {
+                    @if (book.Category == Model.Category)
+                    {
+
+                        <div class="col-md-4">
+                            <partial name="_BookThumbnail" model="@book" />
+                        </div>
+                    }
+
+                }
+
+            </div>
+        </div>
+
+    </div>
+}
+
+

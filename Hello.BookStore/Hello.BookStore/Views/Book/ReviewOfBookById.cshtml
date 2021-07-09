@@ -1,0 +1,65 @@
+﻿@using Hello.BookStore.Models
+@model ReviewBookModel
+
+@{
+    
+    ViewData["Title"] = "ReviewOfBookById";
+}
+
+
+
+<div class="container">
+    @if (ViewBag.IsSuccess == 1)
+    {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Congratulations!</strong> Review has been updated succesfully! <br />
+        Click <a asp-controller="Book" asp-action="GetBook" asp-route-id="@ViewBag.BookId">here</a> to view the Review.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    }
+    else if (ViewBag.IsSuccess == 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Review has not been updated succesfully! <br />
+            Enter your valid name, valid book Id and book name
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <div class="p-1 mb-1 bg-danger text-white"> <h2 class="d-flex justify-content-center">Give review</h2> </div>
+    <hr />
+    <div class="col-6">
+        <div class="justify-content-center">
+            <form method="post" asp-action="ReviewOfBookById" asp-controller="Book">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="BookId" class="control-label"></label>
+                    <input asp-for="BookId" class="form-control" />
+                    <span asp-validation-for="BookId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BookName" class="control-label"></label>
+                    <input asp-for="BookName" class="form-control" />
+                    <span asp-validation-for="BookName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReviewerName" class="control-label"></label>
+                    <input asp-for="ReviewerName" class="form-control" />
+                    <span asp-validation-for="ReviewerName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BookReviewDetails" class="control-label"></label>
+                    <textarea asp-for="BookReviewDetails" class="form-control" rows="10" cols="40"></textarea>
+                    <span asp-validation-for="BookReviewDetails" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

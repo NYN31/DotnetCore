@@ -1,0 +1,66 @@
+﻿
+@{
+    Layout = "_Layout";
+}
+
+
+
+
+
+@*
+    * ViewBag Property:
+
+       This File is used for a common structure. There _Layout file is shown all the view
+        which is created by this applications. If you don't want to this layout file, then
+        simply go to the viewpage and set Layout = null ;
+
+                /*
+             we can't pass anonmyous type object to the view by ViewBag. If we want to
+            solve this problem, then we have to use ExpandoObject() which is
+            ableable is System.Dynamic namespace.
+
+            ViewBag doesn't give compile time error. So it might be trouble in sometime
+             */
+
+    /*
+    anchor tag helper: asp-for, asp-validation-for, asp-controller, asp-action, asp-route-id, asp-route-name, asp-fragment, asp-protocol, asp-host
+    image tag helper: asp-append-version
+    */
+
+    /*
+        * some tools to use EF Core:
+        --> Microsoft.EntityFrameworkCore.SqlServer
+        --> Microsoft.EntityFrameworkCore.Tools
+        --> Microsoft.EntityFrameworkCore.Design
+    */
+
+    /*
+        * DbContext class:
+        ---> create dbContext class inherited from DbContext class
+        ---> Create a class in data folder and use in dbContext class
+        ---> add services in ConfigureServices method
+        ---> Add-igration and update-database
+    */
+
+    /*
+        partial view is a .cshtml(Razor markup) file that is used to render content within other view file output
+        uses => Remove duplicate code, Break up large view file into small components
+        Different ways to render a partial view => partial tag helper, @Html.Partial(), @Html.PartialAsync(), @Html.RenderPartial(), @HtmlRenderPartialAsync()
+    */
+
+    /*
+        ---> Route contrants
+            [Route("book-details/{id:int:min(1)}")]
+            [Route("about-us/{string:alpha:minlength(5):regex()}")]
+        Github link: github.com/dotnet/aspnetcore/tree/master/src/Http/Routing/src/contraints
+    */
+
+    /*
+        Microsoft.AspNetCore.Identity.EntityFrameWorkCore
+        middleware: UseAuthentication()
+        DbContext => IdentityDbContext
+    */
+    /*
+        
+    */
+*@

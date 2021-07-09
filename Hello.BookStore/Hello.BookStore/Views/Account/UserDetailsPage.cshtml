@@ -1,0 +1,31 @@
+﻿@inject Hello.BookStore.Repository.IAccountRepository _accountRepository
+
+
+
+@{
+    var user = _accountRepository.GetUserDetails();
+    var fullName = user.Result.FirstName + " " + user.Result.LastName;
+    ViewData["Title"] = "User Details | " + fullName;
+}
+
+<div class="container">
+    <div class="p-1 mb-1 bg-danger text-white"><h3 class="d-flex justify-content-center">User profile details</h3></div>
+    
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="~/images/noimage.png" class="card-img-top img-thumbnail" style="width:75%;" alt="user image" />
+                    <h5>@fullName</h5>
+                </div>
+
+                <div class="col-md-8">
+                    <ul class="list-group">
+                        <li class="list-group-item"><span class="font-weight-bold">Name - </span> @fullName  </li>
+                        <li class="list-group-item"><span class="font-weight-bold">User Name - </span> @user.Result.UserName</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Email - </span> @user.Result.Email</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Mobile - </span> @user.Result.PhoneNumber</li>
+                        <li class="list-group-item"><span class="font-weight-bold">Birth Date - </span> @user.Result.DateOfBirth</li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+</div>

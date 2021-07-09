@@ -1,0 +1,58 @@
+﻿@using Hello.BookStore.Repository
+@inject IBookRepository _bookRepository
+
+@model BookModel
+
+@{
+    var titleMaxWords = 3;
+    var descriptionMaxWords = 10;
+    int TotalReview = 0;
+    var AllReview = await _bookRepository.GetAllReviewOfBook();
+}
+
+<div class="card mb-4 shadow-sm">
+    <img class="card-img-top" height="225" src="@(string.IsNullOrEmpty(Model.CoverImageUrl) ? "/images/noimage.png" : Model.CoverImageUrl )" alt="Card image cap">
+    <div class="card-body">
+        @{
+            var title = Model.Title;
+            if (title == null || title.Length == 0) title = "Title is not available";
+            var titleWords = title.Split(' ');
+            var space = 1;
+            @for (int i = 0; i < title.Length; i++)
+            {
+                if (title[i] == ' ') space += 1;
+            }
+            title = string.Join(" ", titleWords.Take(titleMaxWords));
+            if (space > titleMaxWords) title += "...";
+        }
+        <h5 class="card-title">@title</h5>
+        @{
+            var description = Model.Description;
+            if (description == null || description.Length == 0) description = "Descriptoin is not available right now";
+            var descriptionWords = description.Split(' ');
+            description = string.Join(" ", descriptionWords.Take(descriptionMaxWords)) + "...";
+        }
+        <p class="card-text">@description</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+                <a asp-controller="book" asp-action="getbook" asp-route-id="@Model.ID"  class="btn btn-sm btn-primary">View details</a>
+            </div>
+            <small class="text-muted"> @Model.Author </small>
+        </div>
+        <hr />
+        @foreach (var review in AllReview)
+        {
+                @if (Model.ID == review.BookId)
+                {
+                    TotalReview += 1;
+                }
+        }
+        <div class="d-flex justify-content-between align-items-center">
+            <a asp-controller="book" asp-action="getbook" asp-route-id="@Model.ID"> Reviews: @TotalReview</a>
+            <div class="btn-group">
+                <a asp-controller="book" asp-action="getbook" asp-route-id="@Model.ID" class="btn btn-sm btn-warning">Add to chart</a>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>

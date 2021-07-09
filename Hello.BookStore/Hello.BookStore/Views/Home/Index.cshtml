@@ -1,0 +1,99 @@
+﻿@using Hello.BookStore.Repository
+@inject IBookRepository _bookRepository
+
+@{
+    ViewData["Title"] = "Home";
+    int totalShowed = 0;
+    int needToShowed = 3;
+}
+
+
+@{
+
+    /* Max reviews book logic */
+
+    static int CompareByKey(KeyValuePair<int, int> a, KeyValuePair<int, int> b)
+    {
+        return a.Key.CompareTo(b.Key);
+    }
+
+
+    var books = await _bookRepository.GetAllBooks();
+    var MostReviewsBookID = new List<int>();
+    var reviews = await _bookRepository.GetAllReviewOfBook();
+
+    var freqArray = new int[10005];
+    var sortedBookList = new List<KeyValuePair<int, int>>();
+
+    for (int i = 1; i <= 10000; i++)
+    {
+        freqArray[i] = 0;
+    }
+
+    foreach (var review in reviews)
+    {
+        freqArray[review.BookId] += 1;
+    }
+
+    for (int i = 1; i <= 10000; i++)
+    {
+        if (freqArray[i] > 0)
+        {
+            sortedBookList.Add(new KeyValuePair<int, int>(freqArray[i], i));
+        }
+    }
+
+    sortedBookList.Sort(CompareByKey);
+
+
+    foreach (var x in sortedBookList)
+    {
+        MostReviewsBookID.Add(x.Value);
+    }
+    MostReviewsBookID.Reverse();
+}
+
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1>Welcome to BookStore</h1>
+        <p class="lead text-muted">
+            It is a long established fact that a reader will be distracted by the readable
+            conteheir infancy. Various versions have evolved over the years, sometimes by
+            accident, sometimes on purpose (injected humour and the like).
+        </p>
+        <a asp-action="GetAllBooks" asp-controller="Book"><button class="btn btn-primary">Get All Books</button></a>
+    </div>
+</section>
+
+<div class="py-5 bg-light">
+    <div class="container">
+        <div class="p-1 mb-1 bg-danger text-white"><h3 class="d-flex justify-content-center">Top Books</h3></div> <br />
+
+        @* @await Component.InvokeAsync("TopBooks", new { count = 3 })*@
+
+        <div class="row">
+            @foreach (var mostReviewsBookID in MostReviewsBookID)
+            {
+
+                foreach (var book in books)
+                {
+                    if (mostReviewsBookID == book.ID)
+                    {
+
+                        <div class="col-md-4">
+                            <partial name="_BookThumbnail" model="@book" />
+                        </div>
+                        totalShowed += 1;
+                    }
+                    if (totalShowed == needToShowed) break;
+                }
+                if (totalShowed == needToShowed) break;
+            }
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <br />
+</div>

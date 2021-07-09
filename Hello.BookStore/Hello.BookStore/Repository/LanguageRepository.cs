@@ -1,0 +1,29 @@
+﻿using Hello.BookStore.Data;
+using Hello.BookStore.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Hello.BookStore.Repository
+{
+    public class LanguageRepository : ILanguageRepository
+    {
+        private readonly BookStoreContext _context = null;
+        public LanguageRepository(BookStoreContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<LanguageModel>> GetLanguages()
+        {
+            return await _context.Languages.Select(x => new LanguageModel()
+            {
+                ID = x.ID,
+                Name = x.Name,
+                Description = x.Description
+            }).ToListAsync();
+        }
+    }
+}
